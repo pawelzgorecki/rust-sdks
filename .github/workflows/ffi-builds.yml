@@ -157,6 +157,11 @@ jobs:
           cargo install cargo-ndk
           cargo ndk --bindgen --target ${{ matrix.target }} build --release ${{ matrix.buildargs }}
 
+      # on windows tree-list the working directory
+      - name: Tree-list
+        if: ${{ matrix.platform == 'windows' }}
+        run: tree 
+
       - name: Copy/Build licenses
         run: |
           echo "# livekit" > TEMP_LICENSE.md
