@@ -147,7 +147,7 @@ jobs:
             curl --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; \
             cd livekit-ffi && cargo build --release --target ${{ matrix.target }} ${{ matrix.buildargs }}"
 
-          sudo chown -R $USER:$USER target/${{ matrix.target }}/release/
+          sudo chown -R $USER:$USER target/${{ matrix.target }}/debug/
 
       # on android use cargo ndk
       - name: Build (Android)
@@ -169,29 +169,29 @@ jobs:
           cat LICENSE >> TEMP_LICENSE.md
           echo "```" >> TEMP_LICENSE.md
           cat livekit-ffi/WEBRTC_LICENSE.md >> TEMP_LICENSE.md
-          mv TEMP_LICENSE.md target/${{ matrix.target }}/release/LICENSE.md
+          mv TEMP_LICENSE.md target/${{ matrix.target }}/debug/LICENSE.md
         shell: bash
 
       # zip the files
       - name: Zip artifact (Unix)
         if: ${{ matrix.os != 'windows-2019' && matrix.platform != 'android'}}
         run: |
-          cp livekit-ffi/include/livekit_ffi.h target/${{ matrix.target }}/release/ 
-          cd target/${{ matrix.target }}/release/
+          cp livekit-ffi/include/livekit_ffi.h target/${{ matrix.target }}/debug/ 
+          cd target/${{ matrix.target }}/debug/
           zip ${{ github.workspace }}/${{ matrix.name }}.zip ${{ matrix.dylib }} livekit_ffi.h LICENSE.md
 
       - name: Zip artifact (Unix for Android)
         if: ${{ matrix.os != 'windows-2019' && matrix.platform == 'android'}}
         run: |
-          cp livekit-ffi/include/livekit_ffi.h target/${{ matrix.target }}/release/ 
-          cd target/${{ matrix.target }}/release/
+          cp livekit-ffi/include/livekit_ffi.h target/${{ matrix.target }}/debug/ 
+          cd target/${{ matrix.target }}/debug/
           zip ${{ github.workspace }}/${{ matrix.name }}.zip ${{ matrix.dylib }} ${{ matrix.jar }} livekit_ffi.h LICENSE.md
 
       - name: Zip artifact (Windows)
         if: ${{ matrix.os == 'windows-2019' }}
         run: |
-          cp livekit-ffi/include/livekit_ffi.h target/${{ matrix.target }}/release/
-          cd target/${{ matrix.target }}/release/
+          cp livekit-ffi/include/livekit_ffi.h target/${{ matrix.target }}/debug/
+          cd target/${{ matrix.target }}/debug/
           Get-ChildItem -Path ${{ matrix.dylib }}, livekit_ffi.h, LICENSE.md | Compress-Archive -DestinationPath ${{ github.workspace }}\${{ matrix.name }}.zip
 
       - name: Upload artifacts
