@@ -8,3 +8,11 @@ members = [
     "webrtc-sys",
     "webrtc-sys/build",
 ]
+
+[profile.dev]
+opt-level = 0         # Disable optimizations to make debugging easier
+debug = true          # Include debug symbols for more detailed debugging
+debug-assertions = true  # Enable debug assertions for better error detection
+overflow-checks = true   # Enable integer overflow checks
+lto = false           # Disable LTO for faster compilation times
+strip = false         # Don't strip symbols so you can fully debug
