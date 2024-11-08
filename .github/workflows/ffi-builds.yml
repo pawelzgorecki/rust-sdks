@@ -29,6 +29,7 @@ jobs:
           - os: windows-2019
             platform: windows
             dylib: livekit_ffi.dll
+            pdb: livekit_ffi.pdb
             target: x86_64-pc-windows-msvc
             name: ffi-windows-x86_64
           # - os: windows-2019
@@ -192,7 +193,7 @@ jobs:
         run: |
           cp livekit-ffi/include/livekit_ffi.h target/${{ matrix.target }}/debug/
           cd target/${{ matrix.target }}/debug/
-          Get-ChildItem -Path ${{ matrix.dylib }}, livekit_ffi.h, LICENSE.md | Compress-Archive -DestinationPath ${{ github.workspace }}\${{ matrix.name }}.zip
+          Get-ChildItem -Path ${{ matrix.dylib }}, ${{ matrix.pdb }}, livekit_ffi.h, LICENSE.md | Compress-Archive -DestinationPath ${{ github.workspace }}\${{ matrix.name }}.zip
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
